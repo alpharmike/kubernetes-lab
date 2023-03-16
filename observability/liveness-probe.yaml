@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp-pod
+  labels:
+    app: webapp
+spec:
+  containers:
+    - image: nginx
+      name: webapp
+      ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          port: 8080
+          path: /api/check
+        exec:
+          command:
+            - cat
+            - /app/ready
+        tcpSocket:
+          port: 3306
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        failureThreshold: 10
+...

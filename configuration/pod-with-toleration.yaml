@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+    - image: nginx
+      name: myapp
+  tolerations:
+    - effect: NoSchedule
+      key: group
+      value: nginx-app
+      operator: Equal
+...
