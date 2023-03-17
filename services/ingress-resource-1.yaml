@@ -1,0 +1,35 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  defaultBackend:
+    service:
+      name: default-service
+      port:
+        number: 80
+  rules:
+    - host: store.myapp.com
+      http:
+        paths:
+          - path: /wear
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp-store-service
+                port:
+                  number: 80
+    - host: stream.myapp.com
+      http:
+        paths:
+          - path: /watch
+            pathType: Exact
+            backend:
+              service:
+                name: myapp-stream-service
+                port:
+                  number: 80
+
+
+...

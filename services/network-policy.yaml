@@ -1,0 +1,41 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        # Note that this implies a AND condition
+        # In order to imply an OR condition, separate the selectors by specifying them as a new list element (using -)
+        - podSelector:
+            matchLabels:
+              app: myapp
+              type: backend
+          namespaceSelector:
+            matchLabels:
+              name: dev
+        # Note the difference
+        - ipBlock:
+            cidr: 192.168.45.10/32
+        # Note the difference
+        - namespaceSelector:
+            matchLabels:
+              name: backup
+      ports:
+        - protocol: TCP
+          port: 3306
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 192.168.45.10/32
+      ports:
+        - protocol: TCP
+          port: 80
+...
